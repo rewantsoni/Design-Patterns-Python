@@ -1,9 +1,11 @@
+# With Push Push Logic
+# We notify the observer of the data that has changed
 import abc
 
 
 class IObserver(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def update(self):
+    def update(self, temperature):
         return 'not implemented'
 
 
@@ -37,49 +39,44 @@ class WeatherStation(IObservable):
 
     def notify_observers(self):
         for observer in self.observers:
-            observer.update()
+            observer.update(self.temperature)
 
     def get_temperature(self):
         return self.temperature
 
-    def set_temperature(self):
+    def set_temperature(self, temperature):
         print('Setting the temperature')
-        self.temperature = self.temperature + 1
+        self.temperature = temperature
         self.notify_observers()
 
 
 class PhoneDisplay(IObserver):
-    def __init__(self, weather_station):
-        self.station = weather_station
 
-    def update(self):
-        print('In PhoneDisplay temperature is {}'.format(self.station.get_temperature()))
+    def update(self, temperature):
+        print('In PhoneDisplay temperature is {}'.format(temperature))
 
 
 class WindowDisplay(IObserver):
-    def __init__(self, weather_station):
-        self.station = weather_station
 
-    def update(self):
-        print('In WindowDisplay temperature is {}'.format(self.station.get_temperature()))
+    def update(self, temperature):
+        print('In WindowDisplay temperature is {}'.format(temperature))
+
 
 class SomeRandomDisplay(IObserver):
-    def __init__(self, weather_station):
-        self.station = weather_station
 
-    def update(self):
-        print('In SomeRandomDisplay temperature is {}'.format(self.station.get_temperature()))
+    def update(self, temperature):
+        print('In SomeRandomDisplay temperature is {}'.format(temperature))
 
 
 if __name__ == '__main__':
     station = WeatherStation(33)
 
-    wc1 = PhoneDisplay(station)
-    wc2 = WindowDisplay(station)
-    wc3 = SomeRandomDisplay(station)
+    wc1 = PhoneDisplay()
+    wc2 = WindowDisplay()
+    wc3 = SomeRandomDisplay()
     station.add_observer(wc1)
     station.add_observer(wc2)
-    station.set_temperature()
+    station.set_temperature(35)
     station.remove_observer(wc1)
     station.add_observer(wc3)
-    station.set_temperature()
+    station.set_temperature(37)
