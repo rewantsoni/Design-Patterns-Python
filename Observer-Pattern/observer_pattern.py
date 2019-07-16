@@ -79,7 +79,6 @@ if __name__ == '__main__':
     wc3 = SomeRandomDisplay(station)
     station.add_observer(wc1)
     station.add_observer(wc2)
-
     station.set_temperature()
     station.remove_observer(wc1)
     station.add_observer(wc3)
